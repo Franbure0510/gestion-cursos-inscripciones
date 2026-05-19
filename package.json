@@ -1,0 +1,21 @@
+{
+  "name": "gestion-cursos-inscripciones",
+  "version": "1.0.0",
+  "description": "API REST para gestión de cursos e inscripciones",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node src/app.js"
+  },
+  "keywords": ["nodejs", "express", "mongodb", "rest", "api"],
+  "author": "Equipo de Desarrollo",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3"
+  }
+}

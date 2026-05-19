@@ -1,0 +1,55 @@
+{
+  "fecha_generacion": "2026-05-19",
+  "proyecto": "Gestión de Cursos e Inscripciones",
+  "base_datos": "gestion_cursos",
+  "usuarios": [
+    {
+      "_id": "6a0bb39800c6d67c028f3481",
+      "name": "Admin",
+      "email": "admin@test.com",
+      "role": "admin",
+      "createdAt": "2026-05-19T00:49:28.431Z"
+    },
+    {
+      "_id": "6a0bbcb700c6d67c028f3492",
+      "name": "Estudiante Juan",
+      "email": "estudiante@test.com",
+      "role": "student",
+      "createdAt": "2026-05-19T01:28:23.109Z"
+    }
+  ],
+  "cursos": [
+    {
+      "_id": "6a0bbb5c00c6d67c028f348d",
+      "title": "Introducción a JavaScript",
+      "description": "Curso básico de JavaScript",
+      "duration": 20,
+      "teacher": {
+        "_id": "6a0bb39800c6d67c028f3481",
+        "name": "Admin",
+        "email": "admin@test.com"
+      },
+      "schedule": "Lunes 10:00",
+      "maxStudents": 25,
+      "isActive": true,
+      "createdAt": "2026-05-19T01:22:36.640Z"
+    }
+  ],
+  "inscripciones": [
+    {
+      "_id": "6a0bbd1f00c6d67c028f3499",
+      "student": {
+        "_id": "6a0bbcb700c6d67c028f3492",
+        "name": "Estudiante Juan",
+        "email": "estudiante@test.com"
+      },
+      "course": {
+        "_id": "6a0bbb5c00c6d67c028f348d",
+        "title": "Introducción a JavaScript"
+      },
+      "status": "active",
+      "grade": null,
+      "enrollmentDate": "2026-05-19T01:30:07.879Z"
+    }
+  ]
+}

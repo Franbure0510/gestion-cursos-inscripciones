@@ -1,0 +1,243 @@
+{
+  "info": {
+    "name": "Gestión de Cursos e Inscripciones",
+    "description": "Colección de pruebas para la API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Registrar usuario",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/register",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"123456\",\n  \"role\": \"admin\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Iniciar sesión",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/login",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"123456\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Ver perfil",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users/profile",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Listar usuarios (Admin)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cursos",
+      "item": [
+        {
+          "name": "Listar cursos",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/courses",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Crear curso",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/courses",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Introducción a la Programación\",\n  \"description\": \"Curso básico de programación\",\n  \"duration\": 40,\n  \"teacher\": \"id_del_teacher\",\n  \"schedule\": \"Lunes y Miércoles 10:00-12:00\",\n  \"maxStudents\": 30\n}"
+            }
+          }
+        },
+        {
+          "name": "Ver curso por ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/courses/id_del_curso",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Actualizar curso",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/courses/id_del_curso",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Introducción a la Programación - Actualizado\",\n  \"isActive\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar curso",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/courses/id_del_curso",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inscripciones",
+      "item": [
+        {
+          "name": "Crear inscripción (Student)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/enrollments",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"id_del_curso\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Mis inscripciones (Student)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/enrollments/my-enrollments",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Listar inscripciones (Admin/Teacher)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/enrollments",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Actualizar inscripción",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/enrollments/id_de_la_inscripcion",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"grade\": 85\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

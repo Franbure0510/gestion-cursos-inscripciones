@@ -140,10 +140,10 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 | DELETE | /api/users/:id | Eliminar usuario | Admin |
 
 ## URLs Desplegadas
-- Frontend Angular: `https://coursehub-admin.vercel.app`
-- Frontend React: `https://coursehub-student.vercel.app`
-- Frontend Next.js: `https://coursehub-public.vercel.app`
-- Backend API: `https://coursehub-api.onrender.com`
+- Backend API: `https://coursehub-api-wu03.onrender.com`
+- Frontend Angular (Admin): `https://gestion-cursos-inscripciones-yp2y-theta.vercel.app`
+- Frontend React (Estudiantes): `https://gestion-cursos-inscripciones-ltqz.vercel.app`
+- Frontend Next.js (Catálogo): `https://gestion-cursos-inscripciones.vercel.app`
 
 ## Flujo Demostrable
 1. **Registro** → El estudiante crea una cuenta

@@ -11,9 +11,9 @@
 6. Generar reporte y guardar como PDF
 
 ### URLs a auditar
-- Frontend Angular: `https://coursehub-admin.vercel.app`
-- Frontend React: `https://coursehub-student.vercel.app`
-- Frontend Next.js: `https://coursehub-public.vercel.app`
+- Frontend Next.js: `https://gestion-cursos-inscripciones.vercel.app`
+- Frontend React: `https://gestion-cursos-inscripciones-ltqz.vercel.app`
+- Frontend Angular: `https://gestion-cursos-inscripciones-yp2y-theta.vercel.app`
 
 ## Análisis de Resultados (Plantilla)
 

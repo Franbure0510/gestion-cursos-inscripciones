@@ -7,7 +7,7 @@
 
 ## CORS (Cross-Origin Resource Sharing)
 - [x] CORS configurado con orígenes específicos (no wildcard *)
-- [x] Solo permitidos: Angular (:4200), React (:3000), Next.js (:3001)
+- [x] Solo permitidos: Angular, React, Next.js (Vercel)
 - [x] Credentials habilitadas para cookies
 - [x] Producción: orígenes de Vercel configurados
 

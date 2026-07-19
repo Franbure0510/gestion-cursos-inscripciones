@@ -1,166 +1,175 @@
-# Gestión de Cursos e Inscripciones - API REST
+# CourseHub - Plataforma de Gestión de Cursos e Inscripciones
 
 ## Descripción
+CourseHub es una plataforma web completa para la gestión de cursos e inscripciones. Permite a los estudiantes explorar catálogos de cursos, inscribirse y gestionar sus inscripciones, mientras que los administradores gestionan cursos, usuarios y el sistema completo.
 
-API REST desarrollada con Node.js, Express y MongoDB para gestionar cursos e inscripciones académicas. Implementa autenticación JWT y control de roles.
+## Problema
+Las instituciones educativas necesitan una plataforma centralizada para gestionar cursos, inscripciones y seguimiento estudiantil de forma eficiente y moderna.
 
-## Requisitos Previos
+## Objetivos
+- Permitir a los estudiantes registrarse, buscar cursos e inscribirse
+- Brindar a los administradores control total sobre cursos y usuarios
+- Demostrar integración completa de frontend, backend, persistencia y autenticación
 
-- Node.js (v14 o superior)
-- MongoDB (v4.4 o superior)
-- npm o yarn
+## Arquitectura
+```
+┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│   Angular       │  │   React         │  │   Next.js       │
+│   (Admin Panel) │  │  (Estudiantes)  │  │  (Catálogo)     │
+│   Puerto 4200   │  │  Puerto 3000    │  │  Puerto 3001    │
+└────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+         │                    │                    │
+         └────────────────────┼────────────────────┘
+                              │
+                    ┌─────────▼─────────┐
+                    │   Node.js/Express │
+                    │   API REST        │
+                    │   Puerto 5000     │
+                    └─────────┬─────────┘
+                              │
+                    ┌─────────▼─────────┐
+                    │   MongoDB Atlas   │
+                    │   Mongoose ODM    │
+                    └───────────────────┘
+```
+
+## Tecnologías
+
+| Capa | Tecnología | Evidencia |
+|------|-----------|-----------|
+| Backend | Node.js, Express, JWT, bcrypt | API REST modular, endpoints probados |
+| Base de datos | MongoDB Atlas, Mongoose | Datos persistidos en la nube |
+| Admin Panel | Angular 17, TypeScript | CRUD funcionando, código tipado |
+| Portal Estudiantes | React 18, Context API | Flujos de login, catálogo, inscripción |
+| Catálogo Público | Next.js 14, SSR/SSG | Rutas con renderizado del lado del servidor |
+| Despliegue | Vercel + Render | URLs públicas operativas |
+
+## Integrantes
+- Francois Larrabure Quinones (6369)
 
 ## Instalación
 
-1. Clonar o extraer el proyecto
-2. Ejecutar en la raíz del proyecto:
-
+### Backend
 ```bash
+cd backend
 npm install
+cp .env.example .env  # Configurar variables
+npm run seed          # Cargar datos de prueba
+npm run dev           # Servidor en http://localhost:5000
 ```
 
-## Configuración de Variables de Entorno
-
-Crear archivo `.env` en la raíz del proyecto:
-
-```env
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/gestion_cursos
-JWT_SECRET=your_super_secret_key_change_in_production
-JWT_EXPIRE=24h
-NODE_ENV=development
-```
-
-## Ejecución
-
+### Frontend Angular (Admin)
 ```bash
-npm start
+cd frontend-angular
+npm install
+ng serve              # Servidor en http://localhost:4200
 ```
 
-El servidor estará disponible en: `http://localhost:3000`
-
-## Estructura del Proyecto
-
-```
-src/
-├── config/
-│   └── db.js              # Conexión a MongoDB
-├── models/
-│   ├── user.model.js      # Modelo de usuario
-│   ├── course.model.js    # Modelo de curso
-│   └── enrollment.model.js # Modelo de inscripción
-├── controllers/
-│   ├── user.controller.js
-│   ├── course.controller.js
-│   └── enrollment.controller.js
-├── routes/
-│   ├── user.routes.js
-│   ├── course.routes.js
-│   └── enrollment.routes.js
-├── middlewares/
-│   ├── auth.middleware.js # Autenticación JWT
-│   └── role.middleware.js # Control de roles
-├── app.js                 # Archivo principal
-└── .env                   # Variables de entorno
+### Frontend React (Estudiantes)
+```bash
+cd frontend-react
+npm install
+npm start             # Servidor en http://localhost:3000
 ```
 
-## Endpoints
+### Frontend Next.js (Catálogo)
+```bash
+cd frontend-nextjs
+npm install
+npm run dev           # Servidor en http://localhost:3001
+```
 
-### Usuarios
+## Variables de Entorno
 
-| Método | Endpoint | Descripción | Autenticación |
-|--------|----------|--------------|---------------|
+### Backend (.env)
+```env
+PORT=5000
+MONGODB_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/coursehub
+JWT_SECRET=tu_jwt_secret_aqui
+JWT_EXPIRE=7d
+NODE_ENV=development
+FRONTEND_ANGULAR_URL=http://localhost:4200
+FRONTEND_REACT_URL=http://localhost:3000
+FRONTEND_NEXTJS_URL=http://localhost:3001
+```
+
+### Frontend Next.js (.env.local)
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
+
+## Credenciales de Prueba
+
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Administrador | admin@coursehub.com | admin123 |
+| Estudiante | student@coursehub.com | student123 |
+
+## Endpoints de la API
+
+### Autenticación
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
 | POST | /api/users/register | Registrar usuario | No |
 | POST | /api/users/login | Iniciar sesión | No |
-| GET | /api/users/profile | Ver perfil | Sí |
-| GET | /api/users | Listar usuarios | Sí (Admin) |
-| GET | /api/users/:id | Ver usuario por ID | Sí |
-| PUT | /api/users/:id | Actualizar usuario | Sí (Admin/Teacher) |
-| DELETE | /api/users/:id | Eliminar usuario | Sí (Admin) |
+| GET | /api/users/profile | Obtener perfil | Sí |
 
 ### Cursos
-
-| Método | Endpoint | Descripción | Autenticación |
-|--------|----------|--------------|---------------|
-| GET | /api/courses | Listar cursos | Sí |
-| GET | /api/courses/:id | Ver curso por ID | Sí |
-| POST | /api/courses | Crear curso | Sí (Admin/Teacher) |
-| PUT | /api/courses/:id | Actualizar curso | Sí (Admin/Teacher) |
-| DELETE | /api/courses/:id | Eliminar curso | Sí (Admin) |
-| GET | /api/courses/teacher/my-courses | Cursos del docente | Sí (Teacher) |
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | /api/courses | Listar cursos (paginado, filtrable) | No |
+| GET | /api/courses/:id | Detalle de curso | No |
+| GET | /api/courses/categories | Listar categorías | No |
+| POST | /api/courses | Crear curso | Admin/Teacher |
+| PUT | /api/courses/:id | Actualizar curso | Admin/Teacher |
+| DELETE | /api/courses/:id | Eliminar curso | Admin |
 
 ### Inscripciones
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| POST | /api/enrollments | Inscribirse a un curso | Student |
+| GET | /api/enrollments/my-enrollments | Mis inscripciones | Student |
+| GET | /api/enrollments | Todas las inscripciones | Admin/Teacher |
 
-| Método | Endpoint | Descripción | Autenticación |
-|--------|----------|--------------|---------------|
-| GET | /api/enrollments | Listar inscripciones | Sí (Admin/Teacher) |
-| GET | /api/enrollments/:id | Ver inscripción por ID | Sí |
-| POST | /api/enrollments | Crear inscripción | Sí (Student) |
-| PUT | /api/enrollments/:id | Actualizar inscripción | Sí (Admin/Teacher) |
-| DELETE | /api/enrollments/:id | Eliminar inscripción | Sí (Admin) |
-| GET | /api/enrollments/my-enrollments | Mis inscripciones | Sí (Student) |
+### Usuarios (Admin)
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | /api/users | Listar usuarios | Admin |
+| GET | /api/users/:id | Obtener usuario | Sí |
+| PUT | /api/users/:id | Actualizar usuario | Admin |
+| DELETE | /api/users/:id | Eliminar usuario | Admin |
 
-## Roles de Usuario
+## URLs Desplegadas
+- Frontend Angular: `https://coursehub-admin.vercel.app`
+- Frontend React: `https://coursehub-student.vercel.app`
+- Frontend Next.js: `https://coursehub-public.vercel.app`
+- Backend API: `https://coursehub-api.onrender.com`
 
-- **admin**: Acceso completo
-- **teacher**: Gestiona cursos, ve inscripciones
-- **student**: Se inscribe en cursos, ve sus inscripciones
+## Flujo Demostrable
+1. **Registro** → El estudiante crea una cuenta
+2. **Inicio de sesión** → Se autentica con JWT
+3. **Catálogo** → Explora cursos (Next.js con SSR)
+4. **Detalle** → Ve información completa del curso
+5. **Inscripción** → Se inscribe en un curso
+6. **Panel estudiante** → Ve sus inscripciones (React)
+7. **Panel admin** → Gestiona cursos y usuarios (Angular)
+8. **Persistencia** → Todo se guarda en MongoDB Atlas
 
-## Ejemplo de Uso
+## Seguridad
+- [x] Helmet para headers de seguridad HTTP
+- [x] CORS restringido a orígenes conocidos
+- [x] Rate Limiting (100 req/15 min)
+- [x] JWT con expiración y httpOnly cookies
+- [x] bcrypt con 12 salt rounds
+- [x] Validación de entradas en modelos Mongoose
+- [x] Respuestas HTTP coherentes
+- [x] Variables de entorno (sin secretos en código)
 
-### Registrar usuario estudiante:
-```json
-POST /api/users/register
-{
-  "name": "Juan Pérez",
-  "email": "juan@example.com",
-  "password": "password123",
-  "role": "student"
-}
-```
+## Video de Exposición
+[Enlace al video en YouTube](https://youtu.be/D7FSfd7HcmU)
 
-### Iniciar sesión:
-```json
-POST /api/users/login
-{
-  "email": "juan@example.com",
-  "password": "password123"
-}
-```
-
-### Crear curso (usar token en header):
-```json
-POST /api/courses
-Authorization: Bearer <token>
-{
-  "title": "Introduction to Programming",
-  "description": "Learn programming basics",
-  "duration": 40,
-  "teacher": "id_del_docente",
-  "schedule": "Monday 10:00",
-  "maxStudents": 30
-}
-```
-
-### Inscribirse en un curso:
-```json
-POST /api/enrollments
-Authorization: Bearer <token>
-{
-  "courseId": "id_del_curso"
-}
-```
-
-## Tecnologías Utilizadas
-
-- Node.js
-- Express.js
-- MongoDB / Mongoose
-- JSON Web Token (JWT)
-- bcryptjs
-- cors
-- dotenv
-
-## Autores
-
-Equipo de Desarrollo - Proyecto Académico
+## Evidencia de Progreso
+- **PA1**: SPA Angular para gestión de cursos (frontend only)
+- **PA2**: Backend API REST con MongoDB
+- **PA4**: Integración Full-stack (React + Next.js + Express)
+- **Evaluación Final**: Angular Admin + React Portal + Next.js Catálogo + Backend mejorado

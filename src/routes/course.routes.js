@@ -6,15 +6,17 @@ const {
   getCourseById,
   updateCourse,
   deleteCourse,
-  getTeacherCourses
+  getTeacherCourses,
+  getCategories
 } = require('../controllers/course.controller');
 const { protect } = require('../middlewares/auth.middleware');
 const { authorize } = require('../middlewares/role.middleware');
 
 router.get('/teacher/my-courses', protect, authorize('teacher'), getTeacherCourses);
+router.get('/categories', getCategories);
 
-router.get('/', protect, getCourses);
-router.get('/:id', protect, getCourseById);
+router.get('/', getCourses);
+router.get('/:id', getCourseById);
 router.post('/', protect, authorize('admin', 'teacher'), createCourse);
 router.put('/:id', protect, authorize('admin', 'teacher'), updateCourse);
 router.delete('/:id', protect, authorize('admin'), deleteCourse);

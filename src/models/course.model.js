@@ -5,32 +5,53 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: [true, 'El título del curso es requerido'],
     trim: true,
-    maxlength: [100, 'El título no puede exceder 100 caracteres']
+    maxlength: [200, 'El título no puede exceder 200 caracteres']
   },
   description: {
     type: String,
     required: [true, 'La descripción es requerida'],
-    maxlength: [500, 'La descripción no puede exceder 500 caracteres']
+    maxlength: [2000, 'La descripción no puede exceder 2000 caracteres']
+  },
+  instructor: {
+    type: String,
+    required: [true, 'El instructor es requerido'],
+    trim: true
+  },
+  category: {
+    type: String,
+    required: [true, 'La categoría es requerida'],
+    trim: true
+  },
+  level: {
+    type: String,
+    enum: ['beginner', 'intermediate', 'advanced'],
+    default: 'beginner'
   },
   duration: {
-    type: Number,
-    required: [true, 'La duración es requerida'],
-    min: [1, 'La duración debe ser al menos 1 hora']
-  },
-  teacher: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'El docente es requerido']
-  },
-  schedule: {
     type: String,
-    required: [true, 'El horario es requerido']
+    required: [true, 'La duración es requerida']
+  },
+  price: {
+    type: Number,
+    default: 0,
+    min: [0, 'El precio no puede ser negativo']
   },
   maxStudents: {
     type: Number,
     default: 30,
     min: [1, 'Debe permitir al menos 1 estudiante']
   },
+  currentStudents: {
+    type: Number,
+    default: 0
+  },
+  image: {
+    type: String,
+    default: ''
+  },
+  syllabus: [{
+    type: String
+  }],
   isActive: {
     type: Boolean,
     default: true
@@ -40,5 +61,7 @@ const courseSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+courseSchema.index({ title: 'text', description: 'text' });
 
 module.exports = mongoose.model('Course', courseSchema);

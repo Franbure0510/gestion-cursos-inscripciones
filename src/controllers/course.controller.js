@@ -25,18 +25,43 @@ exports.createCourse = async (req, res) => {
 
 exports.getCourses = async (req, res) => {
   try {
-    const { isActive } = req.query;
+    const { isActive, search, category, level, page = 1, limit = 10 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
 
     const query = {};
     if (isActive !== undefined) {
       query.isActive = isActive === 'true';
     }
+    if (category) {
+      query.category = category;
+    }
+    if (level) {
+      query.level = level;
+    }
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+      ];
+    }
 
+    const total = await Course.countDocuments(query);
     const courses = await Course.find(query)
       .populate('teacher', 'name email')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
 
-    res.json(courses);
+    res.json({
+      success: true,
+      courses,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / parseInt(limit))
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener cursos', error: error.message });
   }
@@ -98,6 +123,15 @@ exports.deleteCourse = async (req, res) => {
     res.json({ message: 'Curso eliminado correctamente' });
   } catch (error) {
     res.status(500).json({ message: 'Error al eliminar curso', error: error.message });
+  }
+};
+
+exports.getCategories = async (req, res) => {
+  try {
+    const categories = await Course.distinct('category', { isActive: true });
+    res.json(categories);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener categorías', error: error.message });
   }
 };
 

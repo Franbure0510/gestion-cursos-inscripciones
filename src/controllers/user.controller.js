@@ -149,3 +149,14 @@ exports.getProfile = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener perfil', error: error.message });
   }
 };
+
+exports.getUserStats = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalStudents = await User.countDocuments({ role: 'student' });
+    const totalAdmins = await User.countDocuments({ role: 'admin' });
+    res.json({ stats: { totalUsers, totalStudents, totalAdmins } });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener estadísticas', error: error.message });
+  }
+};

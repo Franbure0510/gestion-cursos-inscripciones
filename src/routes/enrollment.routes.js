@@ -14,6 +14,7 @@ const { authorize } = require('../middlewares/role.middleware');
 router.get('/my-enrollments', protect, getMyEnrollments);
 
 router.get('/', protect, authorize('admin', 'teacher'), getEnrollments);
+router.get('/all', protect, authorize('admin', 'teacher'), getEnrollments);
 router.get('/:id', protect, getEnrollmentById);
 router.post('/', protect, authorize('student'), createEnrollment);
 router.put('/:id', protect, authorize('admin', 'teacher'), updateEnrollment);

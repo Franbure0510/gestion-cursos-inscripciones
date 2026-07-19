@@ -27,7 +27,7 @@ export interface CourseResponse {
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
-  private apiUrl = 'http://localhost:5000/api/courses';
+  private apiUrl = 'https://coursehub-api-wu03.onrender.com/api/courses';
 
   constructor(private http: HttpClient) {}
 

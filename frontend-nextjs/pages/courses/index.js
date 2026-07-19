@@ -1,13 +1,14 @@
 import Link from 'next/link'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://coursehub-api-wu03.onrender.com/api'
 
 export async function getStaticProps() {
   let courses = []
   try {
     const res = await fetch(`${API_URL}/courses`)
     if (res.ok) {
-      courses = await res.json()
+      const data = await res.json()
+      courses = data.courses || []
     }
   } catch {
     // fallback vacío si la API no está disponible
@@ -24,18 +25,21 @@ export default function CourseCatalog({ courses }) {
     <div className="catalog">
       <h2>Catálogo de Cursos</h2>
       {courses.length === 0 ? (
-        <p style={{ color: '#888' }}>No se pudieron cargar los cursos. Verifica que la API esté corriendo.</p>
+        <p style={{ color: '#888' }}>No se pudieron cargar los cursos.</p>
       ) : (
         <div className="catalog-grid">
           {courses.map((course) => (
-            <Link href={`/courses/${course.id}`} key={course.id} className="course-card">
-              <h3>{course.name}</h3>
-              <p className="code">{course.code}</p>
+            <Link href={`/courses/${course._id}`} key={course._id} className="course-card">
+              <h3>{course.title}</h3>
+              <p style={{ color: '#64748b', fontSize: '0.85rem' }}>{course.category} · {course.level}</p>
               <p style={{ color: '#555', fontSize: '0.9rem', marginTop: '0.4rem' }}>{course.instructor}</p>
               <div className="meta">
-                <span>{course.credits} créditos</span>
-                <span>{course.enrolled}/{course.capacity} inscritos</span>
+                <span>{course.duration}</span>
+                <span>{course.currentStudents}/{course.maxStudents} inscritos</span>
               </div>
+              <p style={{ fontWeight: 700, color: course.price === 0 ? '#16a34a' : '#4f46e5', marginTop: '0.5rem' }}>
+                {course.price === 0 ? 'Gratis' : `$${course.price}`}
+              </p>
             </Link>
           ))}
         </div>

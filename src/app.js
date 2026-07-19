@@ -28,6 +28,9 @@ const allowedOrigins = [
   process.env.FRONTEND_ANGULAR_URL || 'http://localhost:4200',
   process.env.FRONTEND_REACT_URL || 'http://localhost:3000',
   process.env.FRONTEND_NEXTJS_URL || 'http://localhost:3001',
+  'https://gestion-cursos-inscripciones.vercel.app',
+  'https://gestion-cursos-inscripciones-ltqz.vercel.app',
+  'https://gestion-cursos-inscripciones-yp2y-theta.vercel.app',
 ];
 
 app.use(cors({

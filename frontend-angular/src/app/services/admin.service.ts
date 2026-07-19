@@ -20,7 +20,7 @@ export interface Enrollment {
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
-  private apiUrl = 'http://localhost:5000/api';
+  private apiUrl = 'https://coursehub-api-wu03.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 

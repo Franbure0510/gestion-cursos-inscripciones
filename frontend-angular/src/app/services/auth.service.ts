@@ -12,15 +12,16 @@ export interface User {
 }
 
 export interface AuthResponse {
-  success: boolean;
-  message: string;
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
   token: string;
-  user: User;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'https://coursehub-api-wu03.onrender.com/api/auth';
+  private apiUrl = 'https://coursehub-api-wu03.onrender.com/api/users';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
@@ -47,9 +48,10 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password })
       .pipe(
         tap((res) => {
+          const user: User = { _id: res._id, name: res.name, email: res.email, role: res.role };
           localStorage.setItem('token', res.token);
-          localStorage.setItem('user', JSON.stringify(res.user));
-          this.currentUserSubject.next(res.user);
+          localStorage.setItem('user', JSON.stringify(user));
+          this.currentUserSubject.next(user);
         })
       );
   }

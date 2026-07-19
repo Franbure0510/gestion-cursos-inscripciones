@@ -1,10 +1,10 @@
 # Colección de Endpoints - CourseHub API
 
-Base URL: `https://coursehub-api.onrender.com` (producción) o `http://localhost:5000` (desarrollo)
+Base URL: `https://coursehub-api-wu03.onrender.com/api` (producción) o `http://localhost:5000/api` (desarrollo)
 
 ## Autenticación
 
-### POST /api/auth/register
+### POST /api/users/register
 ```json
 // Request
 {
@@ -16,19 +16,15 @@ Base URL: `https://coursehub-api.onrender.com` (producción) o `http://localhost
 
 // Response 201
 {
-  "success": true,
-  "message": "Registro exitoso",
-  "token": "eyJhbGciOiJIUzI1NiIs...",
-  "user": {
-    "_id": "...",
-    "name": "Juan Pérez",
-    "email": "juan@test.com",
-    "role": "student"
-  }
+  "_id": "...",
+  "name": "Juan Pérez",
+  "email": "juan@test.com",
+  "role": "student",
+  "token": "eyJhbGciOiJIUzI1NiIs..."
 }
 ```
 
-### POST /api/auth/login
+### POST /api/users/login
 ```json
 // Request
 {
@@ -38,22 +34,20 @@ Base URL: `https://coursehub-api.onrender.com` (producción) o `http://localhost
 
 // Response 200
 {
-  "success": true,
-  "message": "Inicio de sesión exitoso",
-  "token": "eyJhbGciOiJIUzI1NiIs...",
-  "user": { ... }
+  "_id": "...",
+  "name": "Administrador",
+  "email": "admin@coursehub.com",
+  "role": "admin",
+  "token": "eyJhbGciOiJIUzI1NiIs..."
 }
 ```
 
-### GET /api/auth/me
+### GET /api/users/profile
 ```
 Headers: Authorization: Bearer <token>
 
 // Response 200
-{
-  "success": true,
-  "user": { "_id": "...", "name": "...", "email": "...", "role": "..." }
-}
+{ "_id": "...", "name": "...", "email": "...", "role": "..." }
 ```
 
 ## Cursos

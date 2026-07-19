@@ -47,7 +47,6 @@ exports.getCourses = async (req, res) => {
 
     const total = await Course.countDocuments(query);
     const courses = await Course.find(query)
-      .populate('teacher', 'name email')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
@@ -69,7 +68,7 @@ exports.getCourses = async (req, res) => {
 
 exports.getCourseById = async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id).populate('teacher', 'name email');
+    const course = await Course.findById(req.params.id);
 
     if (!course) {
       return res.status(404).json({ message: 'Curso no encontrado' });
@@ -137,8 +136,7 @@ exports.getCategories = async (req, res) => {
 
 exports.getTeacherCourses = async (req, res) => {
   try {
-    const courses = await Course.find({ teacher: req.user._id })
-      .populate('teacher', 'name email')
+    const courses = await Course.find({ instructor: req.user.name })
       .sort({ createdAt: -1 });
 
     res.json(courses);

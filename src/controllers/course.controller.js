@@ -2,15 +2,19 @@ const Course = require('../models/course.model');
 
 exports.createCourse = async (req, res) => {
   try {
-    const { title, description, duration, teacher, schedule, maxStudents } = req.body;
+    const { title, description, instructor, category, level, duration, price, maxStudents, syllabus, isActive } = req.body;
 
     const course = await Course.create({
       title,
       description,
+      instructor,
+      category,
+      level,
       duration,
-      teacher,
-      schedule,
-      maxStudents
+      price,
+      maxStudents,
+      syllabus,
+      isActive
     });
 
     res.status(201).json(course);
@@ -82,7 +86,7 @@ exports.getCourseById = async (req, res) => {
 
 exports.updateCourse = async (req, res) => {
   try {
-    const { title, description, duration, schedule, maxStudents, isActive } = req.body;
+    const { title, description, instructor, category, level, duration, price, maxStudents, syllabus, isActive } = req.body;
 
     const course = await Course.findById(req.params.id);
 
@@ -90,11 +94,15 @@ exports.updateCourse = async (req, res) => {
       return res.status(404).json({ message: 'Curso no encontrado' });
     }
 
-    if (title) course.title = title;
-    if (description) course.description = description;
-    if (duration) course.duration = duration;
-    if (schedule) course.schedule = schedule;
-    if (maxStudents) course.maxStudents = maxStudents;
+    if (title !== undefined) course.title = title;
+    if (description !== undefined) course.description = description;
+    if (instructor !== undefined) course.instructor = instructor;
+    if (category !== undefined) course.category = category;
+    if (level !== undefined) course.level = level;
+    if (duration !== undefined) course.duration = duration;
+    if (price !== undefined) course.price = price;
+    if (maxStudents !== undefined) course.maxStudents = maxStudents;
+    if (syllabus !== undefined) course.syllabus = syllabus;
     if (isActive !== undefined) course.isActive = isActive;
 
     const updatedCourse = await course.save();

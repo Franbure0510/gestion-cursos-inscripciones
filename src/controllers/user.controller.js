@@ -73,8 +73,23 @@ exports.loginUser = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password');
-    res.json(users);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const filter = {};
+    if (req.query.role) filter.role = req.query.role;
+    if (req.query.search) {
+      filter.$or = [
+        { name: { $regex: req.query.search, $options: 'i' } },
+        { email: { $regex: req.query.search, $options: 'i' } }
+      ];
+    }
+
+    const total = await User.countDocuments(filter);
+    const users = await User.find(filter).select('-password').skip(skip).limit(limit);
+
+    res.json({ users, pagination: { page, limit, total, pages: Math.ceil(total / limit) } });
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener usuarios', error: error.message });
   }

@@ -46,7 +46,7 @@ export class LoginComponent {
     this.error = '';
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
-        if (res.user.role !== 'admin') {
+        if (res.role !== 'admin') {
           this.error = 'Este usuario no tiene permisos de administrador';
           this.authService.logout();
           this.loading = false;

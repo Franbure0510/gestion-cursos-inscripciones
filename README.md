@@ -166,7 +166,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 - [x] Variables de entorno (sin secretos en código)
 
 ## Video de Exposición
-[Enlace al video en YouTube](https://youtu.be/TU_LINK_AQUI)
+[Enlace al video en YouTube](https://youtu.be/PWhXUCIUTLA)
 
 ## Evidencia de Progreso
 - **PA1**: SPA Angular para gestión de cursos (frontend only)

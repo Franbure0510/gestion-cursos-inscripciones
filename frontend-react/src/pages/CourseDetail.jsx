@@ -22,11 +22,11 @@ export default function CourseDetail() {
     setEnrolling(true)
     setEnrollMsg('')
     try {
-      const res = await api.post(`/courses/${id}/enroll`)
-      setEnrollMsg(res.data.message)
-      setCourse((prev) => ({ ...prev, enrolled: prev.enrolled + 1 }))
+      const res = await api.post('/enrollments', { courseId: id })
+      setEnrollMsg('Inscripción exitosa')
+      setCourse((prev) => ({ ...prev, currentStudents: (prev.currentStudents || 0) + 1 }))
     } catch (err) {
-      setEnrollMsg(err.response?.data?.error || 'Error al inscribirse')
+      setEnrollMsg(err.response?.data?.message || 'Error al inscribirse')
     } finally {
       setEnrolling(false)
     }
@@ -40,17 +40,27 @@ export default function CourseDetail() {
     <div className="course-detail">
       <button onClick={() => navigate('/courses')} className="btn-back">← Volver a cursos</button>
       <div className="detail-card">
-        <h2>{course.name}</h2>
-        <p className="course-code">{course.code}</p>
+        <h2>{course.title}</h2>
+        <p style={{ color: '#64748b', fontSize: '0.85rem' }}>{course.category} · {course.level}</p>
         <p className="description">{course.description}</p>
         <div className="detail-info">
-          <div><strong>Docente:</strong> {course.instructor}</div>
-          <div><strong>Horario:</strong> {course.schedule}</div>
-          <div><strong>Créditos:</strong> {course.credits}</div>
-          <div><strong>Cupos:</strong> {course.enrolled} / {course.capacity}</div>
+          <div><strong>Instructor:</strong> {course.instructor}</div>
+          <div><strong>Duración:</strong> {course.duration}</div>
+          <div><strong>Cupos:</strong> {course.currentStudents} / {course.maxStudents}</div>
+          <div><strong>Precio:</strong> {course.price === 0 ? 'Gratis' : `$${course.price}`}</div>
         </div>
-        <button onClick={handleEnroll} disabled={enrolling || course.enrolled >= course.capacity} className="btn-primary">
-          {enrolling ? 'Inscribiendo...' : course.enrolled >= course.capacity ? 'Curso lleno' : 'Inscribirme'}
+        {course.syllabus && course.syllabus.length > 0 && (
+          <div style={{ marginTop: '1.5rem' }}>
+            <h3>Temario</h3>
+            <ul style={{ paddingLeft: '1.5rem' }}>
+              {course.syllabus.map((item, i) => (
+                <li key={i} style={{ marginBottom: '0.3rem' }}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button onClick={handleEnroll} disabled={enrolling || course.currentStudents >= course.maxStudents} className="btn-primary" style={{ marginTop: '1.5rem' }}>
+          {enrolling ? 'Inscribiendo...' : course.currentStudents >= course.maxStudents ? 'Curso lleno' : 'Inscribirme'}
         </button>
         {enrollMsg && <div className={enrollMsg.includes('exitosa') ? 'success-msg' : 'error-msg'}>{enrollMsg}</div>}
       </div>

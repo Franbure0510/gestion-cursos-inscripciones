@@ -9,7 +9,7 @@ export default function Courses() {
 
   useEffect(() => {
     api.get('/courses')
-      .then((res) => setCourses(res.data))
+      .then((res) => setCourses(res.data.courses || []))
       .catch(() => setError('Error al cargar los cursos'))
       .finally(() => setLoading(false))
   }, [])
@@ -22,14 +22,17 @@ export default function Courses() {
       <h2>Catálogo de Cursos</h2>
       <div className="courses-grid">
         {courses.map((course) => (
-          <Link to={`/courses/${course.id}`} key={course.id} className="course-card">
-            <h3>{course.name}</h3>
-            <p className="course-code">{course.code}</p>
-            <p className="course-instructor">{course.instructor}</p>
+          <Link to={`/courses/${course._id}`} key={course._id} className="course-card">
+            <h3>{course.title}</h3>
+            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>{course.category} · {course.level}</p>
+            <p>{course.instructor}</p>
             <div className="course-meta">
-              <span>{course.credits} créditos</span>
-              <span>{course.enrolled}/{course.capacity} inscritos</span>
+              <span>{course.duration}</span>
+              <span>{course.currentStudents}/{course.maxStudents} inscritos</span>
             </div>
+            <p style={{ fontWeight: 700, color: course.price === 0 ? '#16a34a' : '#4f46e5', marginTop: '0.5rem' }}>
+              {course.price === 0 ? 'Gratis' : `$${course.price}`}
+            </p>
           </Link>
         ))}
       </div>

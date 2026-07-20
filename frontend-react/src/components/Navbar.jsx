@@ -18,6 +18,7 @@ export default function Navbar() {
       <ul className="navbar-links">
         <li><Link to="/dashboard">Inicio</Link></li>
         <li><Link to="/courses">Cursos</Link></li>
+        <li><Link to="/my-enrollments">Mis Cursos</Link></li>
       </ul>
       <div className="navbar-user">
         <span>{user?.name}</span>

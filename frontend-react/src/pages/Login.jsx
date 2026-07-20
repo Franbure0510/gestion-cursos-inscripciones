@@ -18,7 +18,7 @@ export default function Login() {
       await login(email, password)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al iniciar sesión')
+      setError(err.response?.data?.message || 'Error al iniciar sesión')
     } finally {
       setLoading(false)
     }
@@ -37,7 +37,7 @@ export default function Login() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="estudiante@usil.edu.pe"
+              placeholder="student@coursehub.com"
               required
             />
           </div>
@@ -59,8 +59,8 @@ export default function Login() {
         </form>
         <div className="login-info">
           <p><strong>Credenciales de prueba:</strong></p>
-          <p>Email: estudiante@usil.edu.pe</p>
-          <p>Contraseña: demo1234</p>
+          <p>Email: student@coursehub.com</p>
+          <p>Contraseña: student123</p>
         </div>
       </div>
     </div>

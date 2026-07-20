@@ -14,6 +14,16 @@ export default function MyEnrollments() {
       .finally(() => setLoading(false))
   }, [])
 
+  async function handleWithdraw(enrollmentId) {
+    if (!confirm('¿Estás seguro de que deseas retirarte de este curso?')) return
+    try {
+      await api.delete(`/enrollments/${enrollmentId}`)
+      setEnrollments((prev) => prev.filter((e) => e._id !== enrollmentId))
+    } catch (err) {
+      alert(err.response?.data?.message || 'Error al retirarse del curso')
+    }
+  }
+
   if (loading) return <div className="loading">Cargando inscripciones...</div>
   if (error) return <div className="error-msg">{error}</div>
 
@@ -45,6 +55,22 @@ export default function MyEnrollments() {
               <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.5rem' }}>
                 Inscrito: {new Date(enrollment.enrollmentDate).toLocaleDateString('es-PE')}
               </p>
+              <button
+                onClick={() => handleWithdraw(enrollment._id)}
+                style={{
+                  marginTop: '1rem',
+                  padding: '0.5rem 1rem',
+                  background: '#ef4444',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem',
+                  width: '100%'
+                }}
+              >
+                Retirarme del curso
+              </button>
             </div>
           ))}
         </div>

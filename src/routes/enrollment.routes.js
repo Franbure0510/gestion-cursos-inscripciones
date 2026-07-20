@@ -18,6 +18,6 @@ router.get('/all', protect, authorize('admin', 'teacher'), getEnrollments);
 router.get('/:id', protect, getEnrollmentById);
 router.post('/', protect, authorize('student'), createEnrollment);
 router.put('/:id', protect, authorize('admin', 'teacher'), updateEnrollment);
-router.delete('/:id', protect, authorize('admin'), deleteEnrollment);
+router.delete('/:id', protect, deleteEnrollment);
 
 module.exports = router;

@@ -126,6 +126,10 @@ exports.deleteEnrollment = async (req, res) => {
       return res.status(404).json({ message: 'Inscripción no encontrada' });
     }
 
+    if (req.user.role !== 'admin' && enrollment.student.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'No tienes permiso para eliminar esta inscripción' });
+    }
+
     if (enrollment.status !== 'cancelled') {
       const course = await Course.findById(enrollment.course);
       if (course && course.currentStudents > 0) {
@@ -145,7 +149,7 @@ exports.deleteEnrollment = async (req, res) => {
 exports.getMyEnrollments = async (req, res) => {
   try {
     const enrollments = await Enrollment.find({ student: req.user._id })
-      .populate('course', 'title description schedule duration')
+      .populate('course', 'title description category level instructor duration price currentStudents maxStudents')
       .sort({ enrollmentDate: -1 });
 
     res.json(enrollments);

@@ -36,6 +36,9 @@ exports.createEnrollment = async (req, res) => {
       course: courseId
     });
 
+    course.currentStudents = (course.currentStudents || 0) + 1;
+    await course.save();
+
     const populatedEnrollment = await Enrollment.findById(enrollment._id)
       .populate('student', 'name email')
       .populate('course', 'title description schedule');
@@ -121,6 +124,14 @@ exports.deleteEnrollment = async (req, res) => {
 
     if (!enrollment) {
       return res.status(404).json({ message: 'Inscripción no encontrada' });
+    }
+
+    if (enrollment.status !== 'cancelled') {
+      const course = await Course.findById(enrollment.course);
+      if (course && course.currentStudents > 0) {
+        course.currentStudents -= 1;
+        await course.save();
+      }
     }
 
     await enrollment.deleteOne();
